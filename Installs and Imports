@@ -1,6 +1,9 @@
 !pip install matplotlib scipy astropy
 
-# To verify if they are installed succesfully you can run !pip install matplotlib scipy astropy again and Jupyter will tell you if it is installed on the system, otherise you can use the following:
+```
+To verify if they are installed succesfully you can run !pip install matplotlib scipy astropy 
+again and Jupyter will tell you if it is installed on the system, otherise you can use the following:
+```
 
 import matplotlib
 import scipy
