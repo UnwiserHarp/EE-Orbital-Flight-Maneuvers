@@ -1,0 +1,78 @@
+import numpy as np
+
+# Constants
+G = 6.67430e-11  # Gravitational constant (m^3/kg/s^2)
+M_sun = 1.989e30  # Mass of the Sun (kg)
+
+# Orbital radii (m)
+R_earth = 6.371e6  # Earth's radius (m)
+LEO_altitude = 4.00e5  # LEO altitude (m)
+r_earth = R_earth + LEO_altitude  # Total orbital radius for LEO
+r_jupiter = 7.785e11  # Jupiter's orbit around the Sun
+
+def hohmann_transfer(r1, r2, mu):
+    """
+    Compute the delta-v for a Hohmann transfer between two circular orbits.
+    
+    Parameters:
+    r1 : float : Initial orbit radius (m)
+    r2 : float : Final orbit radius (m)
+    mu : float : Gravitational parameter (G*M)
+    
+    Returns:
+    dv1, dv2, dv_total : Tuple of delta-v values in m/s
+    """
+    # First burn (LEO to transfer orbit)
+    dv1 = np.sqrt(mu / r1) * (np.sqrt(2 * r2 / (r1 + r2)) - 1)
+
+    # Second burn (transfer orbit to final orbit)
+    dv2 = np.sqrt(mu / r2) * (1 - np.sqrt(2 * r1 / (r1 + r2)))
+
+    # Total delta-v
+    dv_total = dv1 + dv2
+    
+    return dv1, dv2, dv_total
+
+# Compute Hohmann transfer delta-v
+mu_sun = G * M_sun
+dv1, dv2, dv_total = hohmann_transfer(r_earth, r_jupiter, mu_sun)
+
+# Display results
+print(f"Hohmann Transfer Results:")
+print(f"Delta-v₁ (LEO to transfer orbit): {dv1:.2f} m/s")
+print(f"Delta-v₂ (Transfer orbit to final orbit): {dv2:.2f} m/s")
+print(f"Total Delta-v: {dv_total:.2f} m/s")
+
+# Output:
+
+Hohmann Transfer Results:
+Delta-v₁ (LEO to transfer orbit): 1834052.29 m/s
+Delta-v₂ (Transfer orbit to final orbit): 13003.97 m/s
+Total Delta-v: 1847056.25 m/s
+
+# Delta-V
+
+import numpy as np
+
+# Constants
+Isp = 450  # Specific impulse in seconds
+g0 = 9.81  # Gravity at Earth's surface in m/s^2
+m0 = 2000  # Initial spacecraft mass in kg
+delta_v = 14438  # Total Delta-v from Hohmann transfer in m/s
+
+# Compute final mass using Tsiolkovsky's equation
+m_f = m0 * np.exp(-delta_v / (Isp * g0))
+
+# Compute fuel required
+fuel_used = m0 - m_f
+
+# Display results
+print(f"Tsiolkovsky Rocket Equation Results:")
+print(f"Final spacecraft mass after burn: {m_f:.2f} kg")
+print(f"Fuel required for Hohmann transfer: {fuel_used:.2f} kg")
+
+# Results
+
+Tsiolkovsky Rocket Equation Results:
+Final spacecraft mass after burn: 75.97 kg
+Fuel required for Hohmann transfer: 1924.03 kg
